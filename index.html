@@ -1,0 +1,1904 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ Thống Kiểm Tra Toán Tổng Hợp (30 Câu)</title>
+    
+    <!-- TailWind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+              serif: ['Playfair Display', 'serif']
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX CSS & JS for elegant Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        user-select: text;
+      }
+      .math-block {
+        margin: 1rem 0;
+        overflow-x: auto;
+      }
+      /* Custom scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      .dark ::-webkit-scrollbar-thumb {
+        background: #475569;
+      }
+      /* Animation */
+      @keyframes pulse-slow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+      .animate-pulse {
+        animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+    
+    <!-- HEADER SECTION -->
+    <header class="bg-blue-700 text-white shadow-md py-4 px-6 md:px-8 sticky top-0 z-40 shrink-0">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <div class="flex items-center gap-4">
+          <div class="bg-white/20 p-2.5 rounded shadow-sm">
+            <i data-lucide="book-open" class="text-white shrink-0 w-6 h-6"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-lg md:text-xl text-white tracking-tight leading-none uppercase">
+              Đề Kiểm Tra Toán Tổng Hợp (30 Câu)
+            </h1>
+            <p class="text-xs text-blue-200 mt-1.5 font-medium tracking-wide">
+              Khảo sát kiến thức: Thống kê • Tích phân • Hình học Oxyz • Cấp số cộng/nhân
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6 flex-wrap">
+          <!-- Timer Display Container -->
+          <div id="timer-container" class="flex flex-col text-right">
+            <p class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Thời gian còn lại</p>
+            <p id="timer-clock" class="text-xl font-mono font-bold leading-none mt-1 text-white">
+              90:00
+            </p>
+          </div>
+
+          <div class="hidden sm:block h-10 w-px bg-blue-500"></div>
+
+          <!-- Student ID metadata widget -->
+          <div class="flex items-center gap-3">
+            <div class="text-right hidden md:block">
+              <p class="text-sm font-semibold text-white">Nguyễn Hoàng Nam</p>
+              <p class="text-[10px] text-blue-200">ID: 2024-HS12-0045</p>
+            </div>
+            <div class="h-10 w-10 rounded-full bg-blue-600 border-2 border-blue-400 flex items-center justify-center font-bold text-white text-sm" title="Học sinh: Nguyễn Hoàng Nam">
+              NH
+            </div>
+          </div>
+
+          <div class="h-10 w-px bg-blue-500"></div>
+
+          <!-- Master App controls -->
+          <div class="flex items-center gap-2">
+            <button
+              onclick="toggleHelpModal(true)"
+              class="p-2 text-white bg-white/10 hover:bg-white/20 rounded-md transition-colors"
+              title="Hướng dẫn làm bài"
+            >
+              <i data-lucide="info" class="w-4 h-4"></i>
+            </button>
+
+            <button
+              id="action-btn-header"
+              onclick="handleHeaderAction()"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded font-bold text-xs bg-red-500 hover:bg-red-650 text-white shadow transition-all active:scale-95 cursor-pointer"
+            >
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>NỘP BÀI</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- MAIN EXAM AREA -->
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 py-6 flex flex-col lg:flex-row gap-6 relative">
+      <!-- Exam Grid layout dynamically filled via javascript -->
+      <div id="exam-layout-container" class="w-full flex flex-col lg:flex-row gap-6">
+        <!-- Renders sidebar or report summary -->
+      </div>
+    </main>
+
+    <!-- FOOTER ACCREDITATION -->
+    <footer class="bg-white border-t border-slate-205 py-6 px-6 text-center text-xs text-slate-500 z-10 w-full shrink-0">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="font-medium">
+          © 2026 Đề Kiểm Tra Toán Tổng Hợp. Được thiết kế cho trải nghiệm thi cử mượt mà, chuyên nghiệp nhất.
+        </p>
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-[10px] text-zinc-400">MATH EXAMPAD v1.0.0 (SINGLE FILE EDITION)</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- STICKY FLOATING UTILITIES WIDGET ACTIONS -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 shadow-lg rounded-full">
+      <button
+        onclick="toggleCalculator()"
+        id="toggle-calc-btn"
+        class="flex items-center justify-center p-3 rounded-full shadow-lg border cursor-pointer bg-slate-900 text-rose-400 border-slate-700 hover:text-white"
+        title="Mở máy tính Casio ảo"
+      >
+        <i data-lucide="calculator" class="w-5.5 h-5.5"></i>
+      </button>
+
+      <button
+        onclick="toggleScratchpad()"
+        id="toggle-scratch-btn"
+        class="flex items-center justify-center p-3 rounded-full shadow-lg border cursor-pointer bg-slate-900 text-indigo-400 border-slate-700 hover:text-white"
+        title="Mở bảng vẽ nháp Toán"
+      >
+        <i data-lucide="paintbrush" class="w-5.5 h-5.5"></i>
+      </button>
+    </div>
+
+    <!-- FLOATING POPUP: CASIO WIDGET -->
+    <div id="casio-widget" class="hidden fixed bottom-10 right-10 z-[100] w-[340px] rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-4 text-white select-none">
+      <!-- Calculator Header -->
+      <div id="casio-header-drag" class="flex items-center justify-between cursor-move pb-2 border-b border-rose-500/10 mb-3">
+        <div class="flex items-center gap-1.5 text-slate-400">
+          <i data-lucide="move" class="text-zinc-500 w-3.5 h-3.5"></i>
+          <span class="font-bold text-xs tracking-wider text-rose-500">CASIO</span>
+          <span class="font-mono text-[9px] text-slate-500">fx-580VN X</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button 
+            onclick="toggleRadianMode()"
+            id="radian-toggle-btn"
+            class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-755"
+          >
+            RAD
+          </button>
+          <button onclick="toggleCalculator()" class="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Terminal display Screen -->
+      <div class="w-full bg-emerald-990/10 border border-emerald-500/15 rounded-lg p-3 mb-4 text-slate-100 font-mono flex flex-col items-end min-h-[74px] justify-between shadow-inner relative overflow-hidden">
+        <div class="absolute top-1 left-2 text-[8px] text-emerald-500/50 flex gap-2">
+          <span id="screen-radian-indicator">RAD</span>
+          <span id="screen-shift-indicator" class="hidden">S</span>
+          <span>MATH</span>
+        </div>
+        <div id="screen-expr" class="w-full text-right text-base leading-tight break-all mt-1 pr-1 text-slate-300 tracking-wide min-h-[24px]">
+          0
+        </div>
+        <div id="screen-result" class="w-full text-right text-xl font-bold tracking-wider text-emerald-400">
+        </div>
+      </div>
+
+      <!-- Calculator Buttons Grid layout -->
+      <div class="grid grid-cols-5 gap-1.5">
+        <!-- Row 1 Scientific options keys -->
+        <button onclick="calcPressShift()" id="btn-shift-toggle" class="py-1.5 text-[9px] font-bold rounded font-mono bg-slate-800 text-amber-500">
+          SHIFT
+        </button>
+        <button onclick="calcAppend('π', 'Math.PI')" class="py-1.5 text-[10px] bg-slate-800 hover:bg-slate-750 text-slate-300 rounded font-mono">π</button>
+        <button onclick="calcAppend('e', 'Math.E')" class="py-1.5 text-[10px] bg-slate-800 hover:bg-slate-750 text-slate-300 rounded font-mono">e</button>
+        <button onclick="calcAppend('(', '(')" class="py-1.5 text-[11px] bg-slate-800 hover:bg-slate-750 text-slate-300 rounded font-mono">(</button>
+        <button onclick="calcAppend(')', ')')" class="py-1.5 text-[11px] bg-slate-800 hover:bg-slate-750 text-slate-300 rounded font-mono">)</button>
+
+        <!-- Trigonometric line -->
+        <button onclick="calcAppend('sin(', 'Math.sin(')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-emerald-400 rounded font-mono">sin</button>
+        <button onclick="calcAppend('cos(', 'Math.cos(')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-emerald-400 rounded font-mono">cos</button>
+        <button onclick="calcAppend('tan(', 'Math.tan(')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-emerald-400 rounded font-mono">tan</button>
+        <button onclick="calcAppend('√(', 'Math.sqrt(')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-sky-400 rounded font-mono">√</button>
+        <button onclick="calcAppend('^2', '**2')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-sky-400 rounded font-mono">x²</button>
+
+        <!-- Powers & memory line -->
+        <button onclick="calcAppend('ln(', 'Math.log(')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-amber-400 rounded font-mono">ln</button>
+        <button onclick="calcAppend('log10(', 'Math.log10(')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-amber-400 rounded font-mono">log</button>
+        <button onclick="calcAppend('^', '**')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-sky-400 rounded font-mono">xʸ</button>
+        <button onclick="calcAppend('Ans', 'Ans')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-indigo-400 rounded font-mono">Ans</button>
+        <button onclick="calcAppend('e^', 'Math.exp(')" class="py-1.5 text-[10px] bg-slate-850 hover:bg-slate-750 text-orange-400 rounded font-mono">eˣ</button>
+
+        <!-- Base Numbers grid keys -->
+        <button onclick="calcAppend('7', '7')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">7</button>
+        <button onclick="calcAppend('8', '8')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">8</button>
+        <button onclick="calcAppend('9', '9')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">9</button>
+        <button onclick="calcDelete()" class="py-2.5 text-xs bg-rose-950/80 hover:bg-rose-900 border border-rose-850 text-rose-300 font-bold rounded flex items-center justify-center font-mono">DEL</button>
+        <button onclick="calcClear()" class="py-2.5 text-xs bg-rose-950/80 hover:bg-rose-900 border border-rose-850 text-rose-300 font-bold rounded flex items-center justify-center font-mono">AC</button>
+
+        <button onclick="calcAppend('4', '4')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">4</button>
+        <button onclick="calcAppend('5', '5')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">5</button>
+        <button onclick="calcAppend('6', '6')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">6</button>
+        <button onclick="calcAppend('×', '*')" class="py-2.5 text-lg bg-slate-800 hover:bg-slate-750 text-indigo-305 rounded font-mono">×</button>
+        <button onclick="calcAppend('÷', '/')" class="py-2.5 text-lg bg-slate-800 hover:bg-slate-750 text-indigo-305 rounded font-mono">÷</button>
+
+        <button onclick="calcAppend('1', '1')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">1</button>
+        <button onclick="calcAppend('2', '2')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">2</button>
+        <button onclick="calcAppend('3', '3')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">3</button>
+        <button onclick="calcAppend('+', '+')" class="py-2.5 text-lg bg-slate-800 hover:bg-slate-750 text-indigo-305 rounded font-mono">+</button>
+        <button onclick="calcAppend('-', '-')" class="py-2.5 text-lg bg-slate-800 hover:bg-slate-750 text-indigo-305 rounded font-mono">−</button>
+
+        <button onclick="calcAppend('0', '0')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">0</button>
+        <button onclick="calcAppend('.', '.')" class="py-2.5 text-base bg-slate-700 hover:bg-slate-650 text-white font-semibold rounded font-mono">.</button>
+        <button onclick="calcAppend('×10^', '*10**')" class="py-2.5 text-xs bg-slate-800 hover:bg-slate-750 text-slate-300 rounded font-mono font-bold">x10ˣ</button>
+        <button onclick="calcEvaluate()" class="col-span-2 py-2.5 text-lg bg-rose-600 hover:bg-rose-500 text-white font-bold rounded shadow-lg shadow-rose-600/20 font-mono">=</button>
+      </div>
+
+      <div class="text-[8px] text-center text-slate-500 mt-2.5 font-mono">
+        Nhấn phím `=` để tính • Góc tính mặc định: RADIAN.
+      </div>
+    </div>
+
+    <!-- FLOATING POPUP: BLACKBOARD DRAWING SCRATCHPAD -->
+    <div id="scratch-widget" class="hidden fixed bottom-10 left-10 z-[99] w-[420px] rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-4 text-white select-none">
+      <!-- Drag header bar -->
+      <div id="scratch-header-drag" class="flex items-center justify-between cursor-move pb-2 border-b border-indigo-500/10 mb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="paintbrush" class="text-indigo-400 animate-pulse w-4 h-4"></i>
+          <span class="font-bold text-sm tracking-wide">BẢNG NHÁP THI</span>
+          <span class="text-[10px] text-slate-550 font-mono">Dành cho học sinh vẽ</span>
+        </div>
+        <button onclick="toggleScratchpad()" class="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+      <!-- Drawing Board Canvas Element -->
+      <div class="w-full h-64 rounded-lg overflow-hidden border border-slate-800 mb-3 relative bg-[#1e293b]">
+        <canvas
+          id="scratch-canvas"
+          class="w-full h-full cursor-crosshair block"
+        ></canvas>
+      </div>
+
+      <!-- Control Panels -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-850 p-2.5 rounded-lg border border-slate-800">
+        <!-- Presets color list selector -->
+        <div id="brush-colors-list" class="flex items-center gap-2">
+          <!-- Populated in code -->
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Toggle Eraser mode -->
+          <button
+            onclick="toggleEraserMode()"
+            id="scratch-eraser-btn"
+            class="p-1.5 rounded-md border text-xs font-semibold flex items-center gap-1 transition-colors bg-slate-800 text-slate-300 border-slate-750 hover:bg-slate-750"
+            title="Tẩy nét vẽ"
+          >
+            <i data-lucide="eraser" class="w-3.5 h-3.5"></i>
+            Tẩy
+          </button>
+
+          <!-- Trash and clear all -->
+          <button
+            onclick="clearScratchCanvas()"
+            class="p-1.5 rounded-md bg-slate-800 border border-slate-750 hover:bg-rose-950/40 hover:text-rose-450 hover:border-rose-900 text-slate-300 text-xs font-semibold flex items-center gap-1 transition-colors"
+            title="Xóa toàn bộ bản nháp"
+          >
+            <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+            Xóa hết
+          </button>
+        </div>
+
+        <!-- Stroke size slider -->
+        <div class="flex items-center gap-2 w-full mt-1 border-t border-slate-800 pt-2 text-xs text-slate-400">
+          <span class="shrink-0" id="brush-size-label">Cỡ nét: 3px</span>
+          <input
+            type="range"
+            min="1"
+            max="12"
+            value="3"
+            id="scratch-brush-slider"
+            oninput="changeBrushSize(this.value)"
+            class="w-full accent-rose-500 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAM MANUAL HELP INTRO MODAL DIALOG -->
+    <div id="help-modal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-[1px] flex items-center justify-center p-4">
+      <div class="bg-white p-6 rounded-2xl w-full max-w-md border border-slate-100 shadow-2xl relative">
+        <button
+          onclick="toggleHelpModal(false)"
+          class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-100"
+        >
+          <i data-lucide="x" class="w-4.5 h-4.5"></i>
+        </button>
+
+        <div class="text-center mb-4">
+          <i data-lucide="book-open" class="mx-auto text-rose-500 mb-2 w-7 h-7"></i>
+          <h3 class="font-extrabold text-base text-slate-900">
+            HƯỚNG DẪN LÀM BÀI MÔN TOÁN
+          </h3>
+        </div>
+
+        <div class="space-y-3.5 text-xs text-slate-600 leading-relaxed">
+          <div class="flex gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-[10px] shrink-0 font-mono">1</span>
+            <p>
+              Bài thi gồm <strong>30 câu hỏi trắc nghiệm</strong> chia làm 4 phần: thống kê, tích phân, Oxyz, cấp số cộng/nhân. Thời gian tối đa để hoàn thành là <strong>90 phút</strong>.
+            </p>
+          </div>
+          <div class="flex gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-[10px] shrink-0 font-mono">2</span>
+            <p>
+              Có thể sử dụng <strong>Máy tính Casio ảo</strong> (Biểu tượng Máy tính) hoặc mở <strong>Bảng vẽ nháp</strong> (Biểu tượng Cọ vẽ) tại góc dưới bên phải màn hình để phân tích và tính toán.
+            </p>
+          </div>
+          <div class="flex gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-[10px] shrink-0 font-mono">3</span>
+            <p>
+              Tại bảng điều hướng, bạn có thể nhấp <strong>Đánh dấu câu hỏi</strong> đối với các câu cần cân nhắc kỹ chất lượng. Bong bóng câu hỏi sẽ chuyển sang màu vàng để bạn dễ dàng quay lại.
+            </p>
+          </div>
+          <div class="flex gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-[10px] shrink-0 font-mono">4</span>
+            <p>
+              Đồng hồ sẽ đếm ngược liên tục. Khi hết thời gian hoặc khi bạn nhấp nút <strong>NỘP BÀI</strong>, hệ thống sẽ chấm tự động và cung cấp đầy đủ <strong>bài giải LaTeX chi tiết</strong> hoàn hảo!
+            </p>
+          </div>
+        </div>
+
+        <button
+          onclick="toggleHelpModal(false)"
+          class="w-full mt-6 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl transition-all cursor-pointer shadow-md shadow-rose-500/25"
+        >
+          TÔI ĐÃ HIỂU, BẮT ĐẦU THI
+        </button>
+      </div>
+    </div>
+
+    <!-- CORE JAVASCRIPT APP LOGIC -->
+    <script>
+      // ---- EXAM SYSTEM DATA DEFINITION ----
+      const SECTIONS = [
+        { id: 'section1', title: 'Phần 1: Thống kê và Độ lệch chuẩn', range: 'Câu 1 - 5' },
+        { id: 'section2', title: 'Phần 2: Tích phân cơ bản (Bấm máy Casio)', range: 'Câu 6 - 10' },
+        { id: 'section3', title: 'Phần 3: Hình học không gian Oxyz', range: 'Câu 11 - 22' },
+        { id: 'section4', title: 'Phần 4: Cấp số cộng và Cấp số nhân', range: 'Câu 23 - 30' }
+      ];
+
+      const QUESTIONS = [
+        {
+          id: 1,
+          sectionId: 'section1',
+          sectionTitle: 'Phần 1: Thống kê và Độ lệch chuẩn',
+          questionText: 'Cho mẫu số liệu sau: $5, 7, 8, 10, 15$. Hãy tính số trung bình (giá trị trung bình) của mẫu số liệu này.',
+          options: ['9', '8', '10', '45'],
+          correctIndex: 0,
+          explanation: 'Số trung bình (giá trị trung bình) của mẫu số liệu được tính bằng công thức:\n\n$$\\bar{x} = \\frac{5 + 7 + 8 + 10 + 15}{5} = \\frac{45}{5} = 9$$\n\nDo đó, giá trị trung bình là **9**.'
+        },
+        {
+          id: 2,
+          sectionId: 'section1',
+          sectionTitle: 'Phần 1: Thống kê và Độ lệch chuẩn',
+          questionText: 'Một mẫu số liệu thống kê có phương sai bằng $s^2 = 16$. Hãy xác định độ lệch chuẩn $s$ của mẫu số liệu đó.',
+          options: ['4', '256', '8', '-4'],
+          correctIndex: 0,
+          explanation: 'Độ lệch chuẩn $s$ là căn bậc hai số học của phương sai $s^2$:\n\n$$s = \\sqrt{s^2} = \\sqrt{16} = 4$$\n\n*Lưu ý:* Độ lệch chuẩn luôn là một đại lượng không âm ($s \\ge 0$).'
+        },
+        {
+          id: 3,
+          sectionId: 'section1',
+          sectionTitle: 'Phần 1: Thống kê và Độ lệch chuẩn',
+          questionText: 'Cho một mẫu số liệu có các giá trị là $2, 4, 6, 8$. Hãy tính phương sai ($s^2$) của mẫu số liệu này.',
+          options: ['5', '2', '4', '2.5'],
+          correctIndex: 0,
+          explanation: 'Ta thực hiện tính phương sai theo các bước sau:\n\n1. Tính số trung bình cộng của mẫu số liệu:\n$$\\bar{x} = \\frac{2 + 4 + 6 + 8}{4} = \\frac{20}{4} = 5$$\n\n2. Tính phương sai $s^2$ theo công thức:\n$$s^2 = \\frac{(2-5)^2 + (4-5)^2 + (6-5)^2 + (8-5)^2}{4}$$\n$$s^2 = \\frac{(-3)^2 + (-1)^2 + 1^2 + 3^2}{4} = \\frac{9 + 1 + 1 + 9}{4} = \\frac{20}{4} = 5$$\n\nVậy phương sai của mẫu số liệu này bằng **5**.'
+        },
+        {
+          id: 4,
+          sectionId: 'section1',
+          sectionTitle: 'Phần 1: Thống kê và Độ lệch chuẩn',
+          questionText: 'Một mẫu số liệu khảo sát thời gian tự học của học sinh có kết quả giá trị trung bình là 6. Phương sai đo được là $s^2 = 0.25$. Hãy tính độ lệch chuẩn của mẫu số liệu này.',
+          options: ['0.5', '0.0625', '2.45', '0.125'],
+          correctIndex: 0,
+          explanation: 'Độ lệch chuẩn $s$ là căn bậc hai số học của phương sai $s^2$:\n\n$$s = \\sqrt{s^2} = \\sqrt{0.25} = 0.5$$\n\nDo đó, độ lệch chuẩn đo được là **0.5** giờ (hoặc đơn vị thời gian tương ứng).'
+        },
+        {
+          id: 5,
+          sectionId: 'section1',
+          sectionTitle: 'Phần 1: Thống kê và Độ lệch chuẩn',
+          questionText: 'Tính giá trị trung bình cộng của mẫu điểm số gồm các phần tử: $4, 6, 6, 7, 7, 7, 8, 9$.',
+          options: ['6.75', '7', '6.5', '7.25'],
+          correctIndex: 0,
+          explanation: 'Mẫu số liệu có tổng cộng $N = 8$ phần tử.\n\nTrung bình cộng được tính như sau:\n$$\\bar{x} = \\frac{4 + 6 + 6 + 7 + 7 + 7 + 8 + 9}{8} = \\frac{54}{8} = 6.75$$'
+        },
+        {
+          id: 6,
+          sectionId: 'section2',
+          sectionTitle: 'Phần 2: Tích phân (Bấm Casio)',
+          questionText: 'Tính giá trị của tích phân sau: $I = \\int_{0}^{2} (3x^2 + 1) dx$.',
+          options: ['10', '8', '12', '6'],
+          correctIndex: 0,
+          explanation: 'Ta có thể tính tích phân này bằng tự luận hoặc bằng máy tính Casio:\n\n**Phương pháp tự luận:**\n$$I = \\int_{0}^{2} (3x^2 + 1) dx = \\left[ x^3 + x \\right]\\Big|_{0}^{2}$$\n$$I = (2^3 + 2) - (0^3 + 0) = (8 + 2) - 0 = 10$$\n\n**Phương pháp bấm máy Casio:**\n1. Nhập biểu thức: `3X^2 + 1`\n2. Nhập cận dưới `0` và cận trên `2` và bấm `=` ta thu được kết quả trực tiếp là **10**.'
+        },
+        {
+          id: 7,
+          sectionId: 'section2',
+          sectionTitle: 'Phần 2: Tích phân (Bấm Casio)',
+          questionText: 'Tính giá trị tích phân sau: $I = \\int_{1}^{e} \\frac{1}{x} dx$.',
+          options: ['1', '0', '$e$', '2.718'],
+          correctIndex: 0,
+          explanation: '**Phương pháp tự luận:**\nTa biết nguyên hàm của $\\frac{1}{x}$ là $\\ln|x|$:\n$$I = \\int_{1}^{e} \\frac{1}{x} dx = \\ln|x|\\Big|_{1}^{e} = \\ln(e) - \\ln(1) = 1 - 0 = 1$$\n\n**Phương pháp bấm máy Casio:**\nNhập cận dưới từ `1` đến cận trên là hằng số `e` để gõ chữ $e$ ta thu được kết quả trực tiếp bằng **1**.'
+        },
+        {
+          id: 8,
+          sectionId: 'section2',
+          sectionTitle: 'Phần 2: Tích phân (Bấm Casio)',
+          questionText: 'Tính giá trị tích phân sau (Lưu ý chuyển máy tính sang chế độ Radian): $I = \\int_{0}^{\\pi/2} \\sin(x) dx$.',
+          options: ['1', '0', '-1', '$\\frac{\\pi}{2}$'],
+          correctIndex: 0,
+          explanation: '**Lưu ý lượng giác:** Phải chuyển đơn vị đo góc của máy tính Casio sang **Radian** trước.\n\n**Phương pháp tự luận:**\n$$I = \\int_{0}^{\\pi/2} \\sin(x) dx = \\left[ -\\cos(x) \\right]\\Big|_{0}^{\\pi/2}$$\n$$I = -\\cos\\left(\\frac{\\pi}{2}\\right) - (-\\cos(0)) = -0 + 1 = 1$$\n\n**Phương pháp bấm máy Casio:**\nNhập cận dưới `0`, cận trên `pi/2`, hàm số `sin(X)` rồi ấn phím `=` ra kết quả là **1**.'
+        },
+        {
+          id: 9,
+          sectionId: 'section2',
+          sectionTitle: 'Phần 2: Tích phân (Bấm Casio)',
+          questionText: 'Tính giá trị tích phân sau: $I = \\int_{1}^{2} (x^3 - 2x) dx$.',
+          options: ['0.75', '1.25', '0.5', '2'],
+          correctIndex: 0,
+          explanation: '**Phương pháp tự luận:**\n$$I = \\int_{1}^{2} (x^3 - 2x) dx = \\left[ \\frac{x^4}{4} - x^2 \\right]\\Big|_{1}^{2}$$\n$$I = \\left( \\frac{2^4}{4} - 2^2 \\right) - \\left( \\frac{1^4}{4} - 1^2 \\right)$$\n$$I = (4 - 4) - \\left( 0.25 - 1 \\right) = 0.75$$\n\n**Phương pháp bấm máy Casio:**\nNhập trực tiếp tích phân của hàm số `X^3 - 2X` đi từ `1` đến `2` trên máy tính rồi ấn `=`, kết quả là **0.75**.'
+        },
+        {
+          id: 10,
+          sectionId: 'section2',
+          sectionTitle: 'Phần 2: Tích phân (Bấm Casio)',
+          questionText: 'Tính giá trị của tích phân: $I = \\int_{0}^{1} e^x dx$.',
+          options: ['$e - 1$', '$e$', '1', '$e + 1$'],
+          correctIndex: 0,
+          explanation: '**Phương pháp tự luận:**\nNguyên hàm của $e^x$ chính là $e^x$:\n$$I = \\int_{0}^{1} e^x dx = e^x\\Big|_{0}^{1} = e^1 - e^0 = e - 1$$\n\n**Phương pháp bấm máy Casio:**\n1. Nhập tích phân biểu thức `e^X` chạy từ `0` đến `1` ra kết quả $\\approx 1.71828$.\n2. Thử từng phương án đáp án bằng cách bấm để đối chiếu: $e - 1 \\approx 1.71828$.'
+        },
+        {
+          id: 11,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, cho hai vectơ $\\vec{u} = (1; 2; 3)$ và $\\vec{v} = (2; -1; 4)$. Tính tích vô hướng $\\vec{u} \\cdot \\vec{v}$.',
+          options: ['12', '14', '10', '$(2; -2; 12)$'],
+          correctIndex: 0,
+          explanation: 'Tích vô hướng của hai vectơ $\\vec{u}(x_1; y_1; z_1)$ và $\\vec{v}(x_2; y_2; z_2)$:\n\n$$\\vec{u} \\cdot \\vec{v} = x_1 \\cdot x_2 + y_1 \\cdot y_2 + z_1 \\cdot z_2$$\n\n$$\\vec{u} \\cdot \\vec{v} = 1 \\cdot 2 + 2 \\cdot (-1) + 3 \\cdot 4 = 12$$'
+        },
+        {
+          id: 12,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, cho hai vectơ $\\vec{a} = (1; 0; 2)$ và $\\vec{b} = (2; 1; -1)$. Tìm tọa độ của vectơ tích có hướng $[\\vec{a}, \\vec{b}]$.',
+          options: ['$(-2; 5; 1)$', '$(2; 3; 1)$', '$(-2; 3; -1)$', '$(0; 5; 1)$'],
+          correctIndex: 0,
+          explanation: 'Tích có hướng $[\\vec{a}, \\vec{b}] = (x_c; y_c; z_c)$:\n\n$$x_c = \\begin{vmatrix} 0 & 2 \\\\ 1 & -1 \\end{vmatrix} = -2$$\n$$y_c = \\begin{vmatrix} 2 & 1 \\\\ -1 & 2 \\end{vmatrix} = 5$$\n$$z_c = \\begin{vmatrix} 1 & 0 \\\\ 2 & 1 \\end{vmatrix} = 1$$\n\nVậy $[\\vec{a}, \\vec{b}] = (-2; 5; 1)$.'
+        },
+        {
+          id: 13,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, tính cosin góc giữa hai vectơ $\\vec{a} = (1; 1; 0)$ and $\\vec{b} = (0; 1; 1)$.',
+          options: ['$\\frac{1}{2}$', '$\\frac{\\sqrt{2}}{2}$', '0', '1'],
+          correctIndex: 0,
+          explanation: 'Công thức tính cosin góc giữa hai vectơ:\n\n$$\\cos(\\vec{a}, \\vec{b}) = \\frac{\\vec{a} \\cdot \\vec{b}}{|\\vec{a}| \\cdot |\\vec{b}|}$$\n\n1. $\\vec{a} \\cdot \\vec{b} = 1 \\cdot 0 + 1 \\cdot 1 + 0 \\cdot 1 = 1$\n2. $|\\vec{a}| = \\sqrt{1^2+1^2+0} = \\sqrt{2}$, $|\\vec{b}| = \\sqrt{0+1^2+1^2} = \\sqrt{2}$\n3. $\\cos = \\frac{1}{\\sqrt{2} \\cdot \\sqrt{2}} = \\frac{1}{2}$'
+        },
+        {
+          id: 14,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, tính khoảng cách từ điểm $M(1; 2; 3)$ đến mặt phẳng $(P): 2x - y + 2z + 3 = 0$.',
+          options: ['3', '9', '1', '$\\frac{7}{3}$'],
+          correctIndex: 0,
+          explanation: 'Công thức khoảng cách từ điểm $M(x_0; y_0; z_0)$ đến mặt phẳng $(P)$:\n\n$$d(M, (P)) = \\frac{|2 \\cdot 1 - 2 + 2 \\cdot 3 + 3|}{\\sqrt{2^2 + (-1)^2 + 2^2}} = \\frac{9}{3} = 3$$'
+        },
+        {
+          id: 15,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Cho hình hộp $ABCD.A\'B\'C\'D\'$ có ba vectơ chung đỉnh gồm $\\vec{AB} = (1; 0; 0)$, $\\vec{AD} = (0; 2; 0)$, $\\vec{AA\'} = (0; 0; 3)$. Tính thể tích $V$ của hình hộp này.',
+          options: ['6', '2', '1', '12'],
+          correctIndex: 0,
+          explanation: 'Thể tích $V = \\left| [\\vec{AB}, \\vec{AD}] \\cdot \\vec{AA\'} \\right|$.\n\n1. $[\\vec{AB}, \\vec{AD}] = (0; 0; 2)$\n2. $[\\vec{AB}, \\vec{AD}] \\cdot \\vec{AA\'} = 0 \\cdot 0 + 0 \\cdot 0 + 2 \\cdot 3 = 6$\n\nThể tích hình hộp bằng **6**.'
+        },
+        {
+          id: 16,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, cho hai vectơ $\\vec{u} = (2; -3; 1)$ và $\\vec{v} = (1; 1; 1)$. Tính tích vô hướng $\\vec{u} \\cdot \\vec{v}$.',
+          options: ['0', '6', '-2', '2'],
+          correctIndex: 0,
+          explanation: 'Tích vô hướng:\n$$\\vec{u} \\cdot \\vec{v} = 2 \\cdot 1 + (-3) \\cdot 1 + 1 \\cdot 1 = 0$$\n\nVì bằng 0 nên hai vectơ này vuông góc với nhau.'
+        },
+        {
+          id: 17,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, tính khoảng cách từ gốc tọa độ $O(0; 0; 0)$ đến mặt phẳng $(Q): x + 2y - 2z + 6 = 0$.',
+          options: ['2', '6', '3', '1'],
+          correctIndex: 0,
+          explanation: 'Khoảng cách:\n$$d(O, (Q)) = \\frac{|0 + 0 - 0 + 6|}{\\sqrt{1^2 + 2^2 + (-2)^2}} = \\frac{6}{3} = 2$$'
+        },
+        {
+          id: 18,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Cho ba vectơ chung đỉnh trong không gian tạo thành một hình hộp: $\\vec{a} = (2; 0; 0)$, $\\vec{b} = (0; 1; 5)$, $\\vec{c} = (0; 0; 2)$. Tính thể tích $V$ của hình hộp này.',
+          options: ['4', '20', '8', '12'],
+          correctIndex: 0,
+          explanation: 'Thể tích:\n$$V = |[\\vec{a}, \\vec{b}] \\cdot \\vec{c}|$$\n\n1. $[\\vec{a}, \\vec{b}] = (0; -10; 2)$\n2. $[\\vec{a}, \\vec{b}] \\cdot \\vec{c} = 4$\n\nThể tích hình hộp là **4**.'
+        },
+        {
+          id: 19,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Tính tích vô hướng của hai vectơ đơn vị trên các trục tọa độ là $\\vec{i} = (1; 0; 0)$ và $\\vec{j} = (0; 1; 0)$.',
+          options: ['0', '1', '$(0; 0; 0)$', '2'],
+          correctIndex: 0,
+          explanation: 'Tích vô hướng:\n$$\\vec{i} \\cdot \\vec{j} = 1 \\cdot 0 + 0 \\cdot 1 + 0 \\cdot 0 = 0$$\n\nHai trục tọa độ Ox và Oy vuông góc với nhau.'
+        },
+        {
+          id: 20,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, cho hai vectơ $\\vec{a} = (1; 2; -1)$ và $\\vec{b} = (3; 4; 2)$. Tìm tọa độ vectơ tích có hướng $[\\vec{a}, \\vec{b}]$.',
+          options: ['$(8; -5; -2)$', '$(8; 5; -2)$', '$(-4; -5; -2)$', '$(8; -5; 2)$'],
+          correctIndex: 0,
+          explanation: 'Tích có hướng:\n$$x_c = 2 \\cdot 2 - (-1) \\cdot 4 = 8$$\n$$y_c = (-1) \\cdot 3 - 1 \\cdot 2 = -5$$\n$$z_c = 1 \\cdot 4 - 2 \\cdot 3 = -2$$\n\nVậy $[\\vec{a}, \\vec{b}] = (8; -5; -2)$.'
+        },
+        {
+          id: 21,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, tính cosin góc giữa hai vectơ cùng phương ngược hướng $\\vec{u}$ và $\\vec{v}$.',
+          options: ['-1', '1', '0', '$\\frac{1; 2}{2}$'],
+          correctIndex: 0,
+          explanation: 'Góc giữa hai vectơ cùng phương ngược hướng bằng $180^\\circ$ (hoặc $\\pi$ radian).\n\n$$\\cos(180^\\circ) = -1$$'
+        },
+        {
+          id: 22,
+          sectionId: 'section3',
+          sectionTitle: 'Phần 3: Hình học không gian Oxyz',
+          questionText: 'Trong không gian $Oxyz$, tính khoảng cách từ điểm $A(1; 0; 0)$ đến mặt phẳng tọa độ $(Oyz): x = 0$.',
+          options: ['1', '0', '2', '$\\sqrt{1}$'],
+          correctIndex: 0,
+          explanation: 'Khoảng cách từ điểm $A(1; 0; 0)$ đến mặt phẳng $x=0$ là:\n$$d = |1| = 1$$'
+        },
+        {
+          id: 23,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho cấp số nhân $(u_n)$ có số hạng đầu $u_1 = 3$ và công bội $q = 2$. Tìm số hạng thứ 4 ($u_4$) của cấp số nhân đó.',
+          options: ['24', '18', '48', '9'],
+          correctIndex: 0,
+          explanation: 'Công thức cấu trúc cấp số nhân:\n$$u_n = u_1 \\cdot q^{n-1}$$\n$$u_4 = 3 \\cdot 2^3 = 3 \\cdot 8 = 24$$'
+        },
+        {
+          id: 24,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho cấp số cộng $(u_n)$ có số hạng đầu $u_1 = 5$ và công sai $d = 3$. Tìm số hạng thứ 10 ($u_{10}$) của cấp số cộng đó.',
+          options: ['32', '35', '15', '27'],
+          correctIndex: 0,
+          explanation: 'Số hạng thứ 10:\n$$u_{10} = u_1 + 9d = 5 + 9 \\cdot 3 = 32$$'
+        },
+        {
+          id: 25,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho cấp số cộng $(u_n)$ biết số hạng đầu $u_1 = 2$ và số hạng thứ hai $u_2 = 6$. Tính tổng của 5 số hạng đầu tiên ($S_5$) của cấp số cộng đó.',
+          options: ['50', '30', '40', '62'],
+          correctIndex: 0,
+          explanation: '1. Công sai $d = 6 - 2 = 4$\n2. Tổng 5 số hạng đầu:\n$$S_5 = \\frac{5}{2} \\cdot [2 \\cdot 2 + 4 \\cdot 4] = \\frac{5}{2} \\cdot 20 = 50$$'
+        },
+        {
+          id: 26,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho cấp số nhân $(u_n)$ có số hạng đầu $u_1 = 1$ và công bội $q = 3$. Tính tổng của 4 số hạng đầu tiên ($S_4$) của cấp số nhân này.',
+          options: ['40', '120', '81', '39'],
+          correctIndex: 0,
+          explanation: 'Tổng 4 số hạng đầu:\n$$S_4 = 1 \\cdot \\frac{3^4 - 1}{3 - 1} = \\frac{80}{2} = 40$$'
+        },
+        {
+          id: 27,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho một cấp số cộng $(u_n)$ có $u_1 = -2$ và $u_5 = 10$. Xác định công sai $d$ của cấp số cộng này.',
+          options: ['3', '2.4', '4', '2'],
+          correctIndex: 0,
+          explanation: 'Ta có:\n$$u_5 = u_1 + 4d \\implies 10 = -2 + 4d \\implies 4d = 12 \\implies d = 3$$'
+        },
+        {
+          id: 28,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho cấp số nhân $(u_n)$ có số hạng đầu $u_1 = 2$ và số hạng thứ ba $u_3 = 18$. Biết công bội $q$ mang giá trị dương, hãy tìm $q$.',
+          options: ['3', '9', '-3', '4'],
+          correctIndex: 0,
+          explanation: 'Ta có:\n$$u_3 = u_1 \\cdot q^2 \\implies 18 = 2 \\cdot q^2 \\implies q^2 = 9$$\n\nVì hằng số công bội dương, nên $q = 3$.'
+        },
+        {
+          id: 29,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho ba số hạng liên tiếp của một cấp số cộng là $x, 7, 11$. Tìm giá trị của số hạng $x$.',
+          options: ['3', '4', '5', '2'],
+          correctIndex: 0,
+          explanation: 'Theo tính chất cấp số cộng:\n$$7 = \\frac{x + 11}{2} \\implies 14 = x + 11 \\implies x = 3$$'
+        },
+        {
+          id: 30,
+          sectionId: 'section4',
+          sectionTitle: 'Phần 4: Cấp số cộng và Cấp số nhân',
+          questionText: 'Cho ba số hạng liên tiếp của một cấp số nhân gồm các số dương: $2, x, 8$. Tìm giá trị số dương $x$.',
+          options: ['4', '5', '16', '-4'],
+          correctIndex: 0,
+          explanation: 'Theo tính chất cấp số nhân:\n$$x^2 = 2 \\cdot 8 = 16$$\n\nVì $x$ dương nên $x = 4$.'
+        }
+      ];
+
+      // ---- SYSTEM APP STATE ----
+      let answers = JSON.parse(localStorage.getItem('math_exam_answers')) || {};
+      let flags = JSON.parse(localStorage.getItem('math_exam_flags')) || {};
+      let currentId = parseInt(localStorage.getItem('math_exam_curr_id')) || 1;
+      let isSubmitted = localStorage.getItem('math_exam_submitted') === 'true';
+      let timeLeft = parseInt(localStorage.getItem('math_exam_time_left')) || 90 * 60;
+      
+      let showCalculator = false;
+      let showScratchpad = false;
+      let showHelpModal = false;
+      let isTimerRunning = !isSubmitted;
+      let timerInterval = null;
+
+      // Custom Choice Labels
+      const CHOICE_LETTERS = ['A', 'B', 'C', 'D'];
+
+      // ---- INIT APP ----
+      window.onload = function() {
+        // Register Lucide Icons
+        lucide.createIcons();
+        
+        // Help modal on start if answers are empty
+        if (Object.keys(answers).length === 0) {
+          showHelpModal = true;
+        }
+
+        // Start countdown
+        startCountdown();
+        
+        // Prepopulate colors list inside scratchpad
+        initScratchpadColors();
+
+        // Canvas element setup
+        initScratchpadCanvas();
+
+        // Refresh dynamic workspace
+        render();
+        
+        // Element dragging helper
+        makeElementDraggable(document.getElementById('casio-header-drag'), document.getElementById('casio-widget'));
+        makeElementDraggable(document.getElementById('scratch-header-drag'), document.getElementById('scratch-widget'));
+      };
+
+      // ---- LATEX EQUATION RENDERING PARSER ----
+      function renderMathText(text) {
+        if (!text) return '';
+        
+        // Translate double asterisks **bold** to strong weight tags
+        let processed = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+        // Split math chunks by $$ for Block display mode
+        const parts = processed.split(/(\$\$.*?\$\$)/gs);
+        return parts.map(part => {
+          if (part.startsWith('$$') && part.endsWith('$$')) {
+            const raw = part.slice(2, -2);
+            try {
+              return `<div class="math-block">${katex.renderToString(raw, { displayMode: true, throwOnError: false })}</div>`;
+            } catch (err) {
+              return `<div class="text-red-500 font-mono text-xs">${part}</div>`;
+            }
+          }
+          
+          // Split math chunks by $ for Normal Inline mode
+          const inlineParts = part.split(/(\$.*?\$)/g);
+          return inlineParts.map(item => {
+            if (item.startsWith('$') && item.endsWith('$')) {
+              const raw = item.slice(1, -1);
+              try {
+                return katex.renderToString(raw, { displayMode: false, throwOnError: false });
+              } catch (err) {
+                return `<span class="text-red-500 font-mono text-xs">${item}</span>`;
+              }
+            }
+            return item;
+          }).join('');
+        }).join('');
+      }
+
+      // ---- TIMER LOGIC ----
+      function startCountdown() {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        if (!isTimerRunning) {
+          updateTimerDisplay();
+          return;
+        }
+
+        timerInterval = setInterval(() => {
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            handleAutoSubmit();
+            return;
+          }
+          timeLeft--;
+          localStorage.setItem('math_exam_time_left', timeLeft.toString());
+          updateTimerDisplay();
+        }, 1000);
+      }
+
+      function updateTimerDisplay() {
+        const hDisp = Math.floor(timeLeft / 3600);
+        const mDisp = Math.floor((timeLeft % 3600) / 60);
+        const sDisp = timeLeft % 60;
+
+        const mStr = mDisp < 10 ? `0${mDisp}` : mDisp;
+        const sStr = sDisp < 10 ? `0${sDisp}` : sDisp;
+        
+        const textClock = hDisp > 0 ? `${hDisp}:${mStr}:${sStr}` : `${mStr}:${sStr}`;
+        const clockEl = document.getElementById('timer-clock');
+        if (clockEl) {
+          clockEl.innerText = textClock;
+          if (timeLeft < 600) {
+            clockEl.className = 'text-xl font-mono font-bold leading-none mt-1 text-yellow-300 animate-pulse';
+          } else {
+            clockEl.className = 'text-xl font-mono font-bold leading-none mt-1 text-white';
+          }
+        }
+      }
+
+      // ---- ACTION HANDLERS ----
+      function selectQuestion(id) {
+        currentId = id;
+        localStorage.setItem('math_exam_curr_id', currentId.toString());
+        render();
+      }
+
+      function setSelectAnswer(optIdx) {
+        if (isSubmitted) return;
+        answers[currentId] = optIdx;
+        localStorage.setItem('math_exam_answers', JSON.stringify(answers));
+        render();
+      }
+
+      function toggleQuestionFlag() {
+        if (isSubmitted) return;
+        flags[currentId] = !flags[currentId];
+        localStorage.setItem('math_exam_flags', JSON.stringify(flags));
+        render();
+      }
+
+      function handleHeaderAction() {
+        if (isSubmitted) {
+          restartExam();
+        } else {
+          handleManualSubmit();
+        }
+      }
+
+      function handleManualSubmit() {
+        const solved = Object.keys(answers).length;
+        let msg = `Bạn đã giải quyết ${solved}/30 câu hỏi.\nBạn có chắc chắn muốn nộp câu trả lời thi này không?`;
+        if (solved < 30) {
+          msg += `\nLưu ý: Bạn vẫn còn ${30 - solved} câu hỏi chưa hoàn thành.`;
+        }
+
+        if (confirm(msg)) {
+          isSubmitted = true;
+          isTimerRunning = false;
+          localStorage.setItem('math_exam_submitted', 'true');
+          render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      function handleAutoSubmit() {
+        isSubmitted = true;
+        isTimerRunning = false;
+        localStorage.setItem('math_exam_submitted', 'true');
+        alert('Hết thời gian làm bài! Kết quả làm bài của bạn được nộp tự động.');
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function restartExam() {
+        if (confirm('Bạn có đồng ý xóa toàn bộ câu trả lời hiện tại và bắt đầu thi lại từ đầu?')) {
+          answers = {};
+          flags = {};
+          currentId = 1;
+          isSubmitted = false;
+          timeLeft = 90 * 60;
+          isTimerRunning = true;
+
+          localStorage.removeItem('math_exam_answers');
+          localStorage.removeItem('math_exam_flags');
+          localStorage.removeItem('math_exam_submitted');
+          localStorage.setItem('math_exam_time_left', timeLeft.toString());
+          localStorage.setItem('math_exam_curr_id', '1');
+
+          startCountdown();
+          render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      // ---- SCORE METRIC CALCULATION ENGINE ----
+      function evaluateMetrics() {
+        let correct = 0;
+        let incorrect = 0;
+        let blank = 0;
+
+        const metricsPerSec = {
+          section1: { correct: 0, total: 5 },
+          section2: { correct: 0, total: 5 },
+          section3: { correct: 0, total: 12 },
+          section4: { correct: 0, total: 8 }
+        };
+
+        QUESTIONS.forEach(q => {
+          const ans = answers[q.id];
+          if (ans === undefined) {
+            blank++;
+          } else if (ans === q.correctIndex) {
+            correct++;
+            metricsPerSec[q.sectionId].correct++;
+          } else {
+            incorrect++;
+          }
+        });
+
+        const floatScore = (correct / 30) * 10;
+        const scoreVal = Math.round(floatScore * 10) / 10;
+
+        let ratingLabel = 'Trung bình';
+        let badgeColor = 'text-amber-600 bg-amber-50 border-amber-200';
+        let feedbackMeta = 'Đạt yêu cầu cốt lõi cơ bản. Bạn cần bổ túc cấp số nhân và Oxyz.';
+
+        if (scoreVal >= 9.0) {
+          ratingLabel = 'Xuất Sắc';
+          badgeColor = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+          feedbackMeta = 'Đỉnh cao! Tư duy logic toán vượt trội và kỹ thuật áp dụng công thức sắc bén.';
+        } else if (scoreVal >= 8.0) {
+          ratingLabel = 'Giỏi';
+          badgeColor = 'text-teal-700 bg-teal-50 border-teal-200';
+          feedbackMeta = 'Tuyệt vời mẫu số! Kỹ năng giải toán nhanh và năng lực làm việc rất xuất sắc.';
+        } else if (scoreVal >= 6.5) {
+          ratingLabel = 'Khá';
+          badgeColor = 'text-indigo-700 bg-indigo-50 border-indigo-200';
+          feedbackMeta = 'Khá tốt! Chú ý hơn để xử lý nhanh và làm nhuần nhuyễn kỹ thuật Oxyz.';
+        } else if (scoreVal < 5.0) {
+          ratingLabel = 'Yếu';
+          badgeColor = 'text-red-700 bg-red-50 border-red-200';
+          feedbackMeta = 'Nhấp làm lại và ôn tập phương pháp luận giải chi tiết phía dưới nhé.';
+        }
+
+        return {
+          score: scoreVal,
+          correct,
+          incorrect,
+          blank,
+          ratingLabel,
+          badgeColor,
+          feedbackMeta,
+          secMetrics: metricsPerSec
+        };
+      }
+
+      // ---- DYNAMIC RENDERING INTERFACES ----
+      function render() {
+        const layoutEl = document.getElementById('exam-layout-container');
+        if (!layoutEl) return;
+
+        // Toggle Header active action button representation
+        const headerBtn = document.getElementById('action-btn-header');
+        if (headerBtn) {
+          if (isSubmitted) {
+            headerBtn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded font-bold text-xs bg-slate-900 hover:bg-slate-800 text-white shadow transition-all active:scale-95 cursor-pointer";
+            headerBtn.innerHTML = `<i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> LÀM LẠI`;
+          } else {
+            headerBtn.className = "flex items-center gap-1.5 px-3 py-1.5 rounded font-bold text-xs bg-red-500 hover:bg-red-650 text-white shadow transition-all active:scale-95 cursor-pointer";
+            headerBtn.innerHTML = `<i data-lucide="send" class="w-3.5 h-3.5"></i> NỘP BÀI`;
+          }
+        }
+
+        // Toggle timer view layout in header
+        const timerContainer = document.getElementById('timer-container');
+        if (timerContainer) {
+          if (isSubmitted) {
+            timerContainer.classList.add('hidden');
+          } else {
+            timerContainer.classList.remove('hidden');
+          }
+        }
+
+        if (!isSubmitted) {
+          // --- ACTIVE TEST SUBMISSION MODE VIEW ---
+          const currentQuestion = QUESTIONS.find(q => q.id === currentId) || QUESTIONS[0];
+          const solvedCount = Object.keys(answers).length;
+          const currFlagged = !!flags[currentId];
+          const percentVal = Math.round((solvedCount / 30) * 100);
+
+          // Build Sections statistics
+          let sectionsHTML = '';
+          SECTIONS.forEach(sec => {
+            const secQuestions = QUESTIONS.filter(q => q.sectionId === sec.id);
+            const doneInSec = secQuestions.filter(q => answers[q.id] !== undefined).length;
+            const secPercent = Math.round((doneInSec / secQuestions.length) * 100);
+            
+            const isActive = currentQuestion.sectionId === sec.id;
+            const activeClass = isActive 
+              ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold shadow-sm' 
+              : 'bg-transparent border-transparent hover:bg-slate-50 text-slate-600';
+
+            const badgeClass = secPercent === 100 
+              ? 'bg-green-100 text-green-850'
+              : 'bg-slate-100 text-slate-600';
+
+            sectionsHTML += `
+              <button
+                onclick="goToFirstOfSection('${sec.id}')"
+                class="text-left p-2 rounded-lg text-xs font-semibold flex items-center justify-between gap-2 border transition-all ${activeClass}"
+              >
+                <div class="truncate">
+                  <p class="truncate block font-medium">${sec.title.split(': ')[1] || sec.title}</p>
+                  <span class="text-[10px] text-slate-400 font-normal">${sec.range}</span>
+                </div>
+                <span class="text-[9px] font-mono shrink-0 px-1 py-0.5 rounded font-bold ${badgeClass}">
+                  ${secPercent}%
+                </span>
+              </button>
+            `;
+          });
+
+          // Build 1-30 grid interactive bubble elements HTML code
+          let bubblesHTML = '';
+          QUESTIONS.forEach(q => {
+            const isIdxCurrent = q.id === currentId;
+            const hasIdxAnswer = answers[q.id] !== undefined;
+            const isIdxFlagged = !!flags[q.id];
+
+            let bubbleStyle = 'bg-slate-100 border-slate-205 text-slate-400';
+            if (hasIdxAnswer) {
+              bubbleStyle = 'bg-green-100 border-green-200 text-green-700 font-bold';
+            }
+            if (isIdxFlagged) {
+              bubbleStyle = 'bg-yellow-105 border-yellow-250 text-yellow-700 font-bold';
+            }
+            if (isIdxCurrent) {
+              bubbleStyle = 'bg-blue-600 border-blue-700 text-white font-black scale-110 shadow-md ring-2 ring-blue-500 ring-offset-1 z-10';
+            }
+
+            bubblesHTML += `
+              <button
+                onclick="selectQuestion(${q.id})"
+                class="aspect-square min-h-[38px] flex items-center justify-center rounded text-xs font-mono font-bold cursor-pointer transition-all active:scale-95 ${bubbleStyle}"
+              >
+                ${q.id}
+              </button>
+            `;
+          });
+
+          // Build Radio Choices Options
+          let optionsHTML = '';
+          currentQuestion.options.forEach((opt, idx) => {
+            const isSelected = answers[currentId] === idx;
+            const optionBubbleBorder = isSelected 
+              ? 'border-blue-500 bg-blue-50/70 text-blue-900 font-semibold shadow-sm' 
+              : 'border-slate-100 bg-white hover:border-blue-200 text-slate-705';
+
+            const activeChoicePrefix = isSelected 
+              ? 'bg-blue-600 text-white font-extrabold'
+              : 'border border-slate-200 text-slate-400';
+
+            optionsHTML += `
+              <button
+                onclick="setSelectAnswer(${idx})"
+                class="flex items-center p-4 border-2 rounded-xl text-left cursor-pointer transition-all ${optionBubbleBorder}"
+              >
+                <div class="w-8 h-8 rounded-full flex items-center justify-center mr-4 text-sm font-bold shrink-0 transition-colors ${activeChoicePrefix}">
+                  ${CHOICE_LETTERS[idx]}
+                </div>
+                <span class="text-sm md:text-base pr-2 flex-1">${renderMathText(opt)}</span>
+              </button>
+            `;
+          });
+
+          // Left/Right Arrow limits disabling
+          const isPrevDisabled = currentId === 1 ? 'disabled' : '';
+
+          // Construct final master exam workspace layout markup
+          layoutEl.innerHTML = `
+            <!-- SIDEBAR CONTROL COL -->
+            <section class="w-full lg:w-[300px] shrink-0 self-stretch flex flex-col gap-5">
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                
+                <!-- Progress parameters -->
+                <div class="p-4 border-b border-slate-200 bg-slate-50">
+                  <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Tiến trình làm bài</h2>
+                  <div class="mt-3 flex justify-between text-xs">
+                    <span class="text-slate-600">Đã làm: <strong class="font-bold text-slate-800">${solvedCount}/30</strong></span>
+                    <span class="text-slate-600">Tỷ lệ: <strong class="font-bold text-blue-600">${percentVal}%</strong></span>
+                  </div>
+                  <div class="w-full bg-slate-200 h-1.5 rounded-full mt-2">
+                    <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-300" style="width: ${percentVal}%"></div>
+                  </div>
+                </div>
+
+                <!-- Sections stats progress indicators -->
+                <div class="p-4 border-b border-slate-200 flex flex-col gap-1.5 bg-white">
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                    Cấu trúc 4 phần của đề thi
+                  </p>
+                  ${sectionsHTML}
+                </div>
+
+                <!-- 1-30 interactive buttons grid -->
+                <div class="p-4 bg-white">
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+                    Các câu hỏi từ 1 - 30
+                  </p>
+                  <div class="grid grid-cols-5 gap-2">
+                    ${bubblesHTML}
+                  </div>
+                </div>
+
+                <!-- Bottom Sidebar action block -->
+                <div class="p-4 bg-slate-50 border-t border-slate-100 mt-auto">
+                  <button 
+                    onclick="handleManualSubmit()"
+                    class="w-full py-2.5 bg-red-500 hover:bg-red-650 text-white font-bold rounded-lg transition-colors shadow-sm text-xs cursor-pointer tracking-wider"
+                  >
+                    NỘP BÀI THI
+                  </button>
+                </div>
+
+              </div>
+            </section>
+
+            <!-- CORE QUESTION WORKBENCH -->
+            <section class="flex-1 self-stretch flex flex-col gap-6">
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex-1 flex flex-col overflow-hidden justify-between">
+                
+                <!-- Card Header -->
+                <div class="px-6 md:px-8 py-5 border-b border-slate-200 bg-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shrink-0">
+                  <span class="text-blue-600 font-bold px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-xs uppercase tracking-wide">
+                    ${currentQuestion.sectionTitle}
+                  </span>
+                  <button
+                    onclick="toggleQuestionFlag()"
+                    class="text-slate-400 hover:text-slate-650 text-xs italic underline decoration-slate-200 flex items-center gap-1.5 cursor-pointer transition-colors"
+                  >
+                    <i data-lucide="flag" class="w-3.5 h-3.5 ${currFlagged ? 'fill-yellow-500 text-yellow-500' : ''}"></i>
+                    ${currFlagged ? 'Đã đánh dấu xem lại' : 'Đánh dấu câu hỏi này'}
+                  </button>
+                </div>
+
+                <!-- Question details block -->
+                <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                  <h3 class="text-lg md:text-xl font-semibold leading-relaxed mb-6 select-text text-slate-900">
+                    <span class="text-blue-600 font-bold mr-2">Câu ${currentQuestion.id}:</span>
+                    ${renderMathText(currentQuestion.questionText)}
+                  </h3>
+
+                  <!-- Options selector grid layout -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                    ${optionsHTML}
+                  </div>
+                </div>
+
+                <!-- Lower navigation footer control elements -->
+                <div class="px-6 md:px-8 py-5 bg-slate-50 border-t border-slate-200 flex justify-between items-center shrink-0">
+                  <button
+                    ${isPrevDisabled}
+                    onclick="navigatePrevious()"
+                    class="px-5 py-2 border border-slate-300 rounded-lg bg-white font-medium text-slate-600 hover:border-blue-400 hover:bg-slate-50 text-xs flex items-center disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <i data-lucide="chevron-left" class="mr-1.5 w-4 h-4"></i>
+                    Câu trước
+                  </button>
+                  
+                  <div class="text-slate-400 font-semibold text-xs font-mono">
+                    Câu ${currentId} / 30
+                  </div>
+
+                  ${currentId === 30 ? `
+                    <button
+                      onclick="handleManualSubmit()"
+                      class="px-5 py-2 bg-red-500 hover:bg-red-650 text-white rounded-lg font-bold text-xs flex items-center shadow transition-colors cursor-pointer"
+                    >
+                      Nộp bài thi
+                    </button>
+                  ` : `
+                    <button
+                      onclick="navigateNext()"
+                      class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg font-bold text-xs flex items-center shadow transition-colors cursor-pointer"
+                    >
+                      Câu tiếp theo
+                      <i data-lucide="chevron-right" class="ml-1.5 w-4 h-4"></i>
+                    </button>
+                  `}
+                </div>
+
+              </div>
+
+              <!-- Secondary absolute style Info cards -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0 relative">
+                <div class="bg-blue-900 text-white rounded-xl p-6 relative overflow-hidden shadow-sm">
+                  <h4 class="text-blue-300 text-xs font-bold uppercase tracking-wider mb-2">Ghi chú &amp; Công thức</h4>
+                  <p class="text-sm text-blue-100 leading-relaxed font-medium">
+                    Giá trị trung bình mẫu: <br/>
+                    <span class="font-serif italic font-bold text-lg inline-block mt-1">x̄ = (x₁ + x₂ + ... + xₙ) / n</span>
+                  </p>
+                  <p class="text-[11px] text-blue-200/80 mt-2">
+                    *Mẫu số liệu: Đảm bảo đếm đúng n phần tử của dãy số liệu mẫu.
+                  </p>
+                  <svg class="absolute bottom-[-20px] right-[-10px] w-28 h-28 opacity-10 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M2 19h20V5H2v14zm2-12h16v10H4V7z"/></svg>
+                </div>
+                
+                <div class="bg-white border border-slate-205 rounded-xl p-6 flex flex-col justify-center items-center text-center shadow-sm">
+                  <div class="p-2.5 bg-amber-50 rounded-full mb-2">
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600"></i>
+                  </div>
+                  <p class="text-sm font-semibold text-slate-700">Lưu ý đặc biệt</p>
+                  <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">
+                    Hãy bật máy tính Casio ảo góc dưới để giải các bài tích phân và Oxyz
+                  </p>
+                </div>
+              </div>
+
+            </section>
+          `;
+        } else {
+          // --- REPORT GRADING SUMMARY AFTER EXAMS SUBMITTED ---
+          const report = evaluateMetrics();
+          
+          let sectionsReportHTML = '';
+          SECTIONS.forEach(sec => {
+            const m = report.secMetrics[sec.id];
+            const pct = Math.round((m.correct / m.total) * 100);
+
+            let barColor = 'bg-slate-300';
+            if (pct >= 80) barColor = 'bg-emerald-500';
+            else if (pct >= 50) barColor = 'bg-blue-600';
+            else if (pct > 0) barColor = 'bg-amber-500';
+
+            sectionsReportHTML += `
+              <div class="text-xs">
+                <div class="flex justify-between font-semibold text-slate-600 mb-1 leading-none">
+                  <span class="truncate max-w-[180px]">${sec.title.split(': ')[1]}</span>
+                  <span class="font-mono text-[11px] shrink-0 font-bold">${m.correct}/${m.total} câu (${pct}%)</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2">
+                  <div class="h-full rounded-full transition-all duration-500 ${barColor}" style="width: ${pct}%"></div>
+                </div>
+              </div>
+            `;
+          });
+
+          // Accordion list of 30 exact Solutions
+          let solutionsAccordionListHTML = '';
+          QUESTIONS.forEach(q => {
+            const studentIdx = answers[q.id];
+            const hasAns = studentIdx !== undefined;
+            const isCorrect = studentIdx === q.correctIndex;
+
+            let badgeBorderColorClass = 'border-slate-200 bg-slate-50/50';
+            let iconCode = `<i data-lucide="help-circle" class="text-slate-400 w-4 h-4"></i>`;
+
+            if (hasAns) {
+              if (isCorrect) {
+                badgeBorderColorClass = 'border-emerald-200 bg-emerald-50/10';
+                iconCode = `<span class="w-5 h-5 rounded-md bg-emerald-100 text-emerald-800 text-xs font-black flex items-center justify-center font-mono">✓</span>`;
+              } else {
+                badgeBorderColorClass = 'border-rose-200 bg-rose-50/10';
+                iconCode = `<span class="w-5 h-5 rounded-md bg-rose-100 text-rose-800 text-xs font-black flex items-center justify-center font-mono">✗</span>`;
+              }
+            }
+
+            // Options inside solution card
+            let solOptionsGridHTML = '';
+            q.options.forEach((opt, optIdx) => {
+              let cellClass = 'bg-white border-slate-200';
+              if (optIdx === q.correctIndex) {
+                cellClass = 'bg-emerald-50 border-emerald-300 text-emerald-800 font-bold';
+              } else if (hasAns && optIdx === studentIdx && !isCorrect) {
+                cellClass = 'bg-rose-50 border-rose-300 text-rose-805 font-bold';
+              }
+
+              let circularIdxIndicator = 'bg-slate-100 border-slate-200 text-slate-500';
+              if (optIdx === q.correctIndex) {
+                circularIdxIndicator = 'bg-emerald-500 border-emerald-500 text-white';
+              } else if (hasAns && optIdx === studentIdx && !isCorrect) {
+                circularIdxIndicator = 'bg-rose-500 border-rose-500 text-white';
+              }
+
+              solOptionsGridHTML += `
+                <div class="p-2.5 rounded-lg border flex items-center gap-2 ${cellClass}">
+                  <span class="w-4 h-4 rounded text-[9px] font-bold flex items-center justify-center shrink-0 border uppercase ${circularIdxIndicator}">
+                    ${CHOICE_LETTERS[optIdx]}
+                  </span>
+                  <div>${renderMathText(opt)}</div>
+                </div>
+              `;
+            });
+
+            solutionsAccordionListHTML += `
+              <div class="border rounded-xl shadow-xs overflow-hidden transition-all ${badgeBorderColorClass}">
+                
+                <!-- Heading details bar -->
+                <div class="p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 bg-white">
+                  <div class="flex items-center gap-3 w-full md:w-auto">
+                    ${iconCode}
+                    <span class="font-mono text-xs font-bold text-slate-500">CÂU ${q.id}</span>
+                    <span class="text-[10px] font-bold text-slate-400 py-0.5 px-1.5 bg-slate-100 rounded">
+                      ${q.sectionTitle.split(': ')[1]}
+                    </span>
+                  </div>
+
+                  <div class="flex items-center gap-2.5 text-xs text-slate-500 shrink-0 font-medium ml-8 md:ml-0">
+                    <span>
+                      Lựa chọn của bạn: 
+                      <strong class="font-bold ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}">
+                        ${hasAns ? CHOICE_LETTERS[studentIdx] : 'Bỏ trống'}
+                      </strong>
+                    </span>
+                    <span class="text-slate-300">|</span>
+                    <span>
+                      Đáp án đúng: 
+                      <strong class="text-emerald-605 font-bold">
+                        ${CHOICE_LETTERS[q.correctIndex]}
+                      </strong>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Collapsed body solver -->
+                <div class="p-4 border-t border-slate-100 bg-slate-50/40">
+                  <div class="mb-4 text-slate-800 text-sm font-medium leading-relaxed">
+                    ${renderMathText(q.questionText)}
+                  </div>
+
+                  <!-- Mini MCQ block -->
+                  <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4 font-normal text-xs text-slate-600">
+                    ${solOptionsGridHTML}
+                  </div>
+
+                  <!-- Math Explanation details -->
+                  <div class="p-4 bg-white border border-slate-200/50 rounded-xl">
+                    <p class="text-[10px] font-bold text-rose-500 tracking-wider uppercase mb-2 flex items-center gap-1 leading-none">
+                      <i data-lucide="sparkles" class="w-3 h-3 text-rose-500 animate-pulse"></i>
+                      ĐÁP ÁN & CÁCH GIẢI CHI TIẾT
+                    </p>
+                    <div class="text-slate-700 text-xs focus:outline-none whitespace-pre-line leading-relaxed">
+                      ${renderMathText(q.explanation)}
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            `;
+          });
+
+          // Embed layout markup inside page dynamically
+          layoutEl.innerHTML = `
+            <div class="w-full flex flex-col gap-6">
+              
+              <!-- SCORE REPORT BENTO GRIDS -->
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Circle gauge Donut score -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-205 shadow-sm flex flex-col items-center justify-center text-center">
+                  <p class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-4">
+                    KẾT QUẢ ĐIỂM SỐ CỦA BẠN
+                  </p>
+                  
+                  <div class="relative w-40 h-40 flex items-center justify-center mb-4">
+                    <svg class="absolute w-full h-full transform -rotate-90">
+                      <circle
+                        cx="80"
+                        cy="80"
+                        r="70"
+                        class="stroke-slate-100"
+                        stroke-width="10"
+                        fill="transparent"
+                      />
+                      <circle
+                        cx="80"
+                        cy="80"
+                        r="70"
+                        class="stroke-blue-600"
+                        stroke-dasharray="${2 * Math.PI * 70}"
+                        stroke-dashoffset="${(2 * Math.PI * 70) * (1 - report.correct / 30)}"
+                        stroke-width="10"
+                        fill="transparent"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                    <div class="flex flex-col items-center">
+                      <span class="font-bold text-4xl text-slate-900 tracking-tighter">
+                        ${report.score}
+                      </span>
+                      <span class="text-[10px] font-bold text-slate-404 block border-t border-slate-100 pt-1 mt-1 font-mono">
+                        THANG ĐIỂM 10
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="px-4 py-1.5 rounded-full border text-xs font-black tracking-wider uppercase ${report.badgeColor}">
+                    ${report.ratingLabel}
+                  </div>
+                  <p class="text-xs text-slate-500 max-w-[240px] mt-2.5 italic">
+                    "${report.feedbackMeta}"
+                  </p>
+                </div>
+
+                <!-- Report parameters grid -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-205 shadow-sm flex flex-col justify-between gap-4">
+                  <div>
+                    <p class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-3 text-center lg:text-left">
+                      THỐNG KÊ CHI TIẾT CÂU TRẢ LỜI
+                    </p>
+                    <div class="flex flex-col gap-3">
+                      <div class="flex items-center justify-between text-xs font-semibold py-1 border-b border-slate-100">
+                        <span class="flex items-center gap-1.5 text-slate-500">
+                          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i> Đúng:
+                        </span>
+                        <span class="font-mono text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded text-sm font-bold">
+                          ${report.correct} / 30
+                        </span>
+                      </div>
+                      <div class="flex items-center justify-between text-xs font-semibold py-1 border-b border-slate-100">
+                        <span class="flex items-center gap-1.5 text-slate-500">
+                          <i data-lucide="x-circle" class="w-3.5 h-3.5 text-rose-500"></i> Sai:
+                        </span>
+                        <span class="font-mono text-rose-550 bg-rose-50 px-2 py-0.5 rounded text-sm font-bold">
+                          ${report.incorrect} / 30
+                        </span>
+                      </div>
+                      <div class="flex items-center justify-between text-xs font-semibold py-1">
+                        <span class="flex items-center gap-1.5 text-slate-500">
+                          <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-slate-400"></i> Bỏ trống:
+                        </span>
+                        <span class="font-mono text-slate-500 bg-slate-105 px-2 py-0.5 rounded text-sm font-bold">
+                          ${report.blank} / 30
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-blue-50 border border-blue-100 p-3.5 rounded-xl text-xs">
+                    <div class="flex gap-2 items-start text-blue-700 font-medium font-sans">
+                      <i data-lucide="sparkles" class="w-4 h-4 shrink-0 mt-0.5 animate-pulse text-blue-500"></i>
+                      <div>
+                        <p class="font-bold mb-0.5">Lời khuyên luyện thi:</p>
+                        <p class="text-[11px] leading-tight text-slate-500">
+                          Bạn làm đúng ${Math.round((report.correct / 30) * 100)}% toàn bộ kỳ khảo sát. Nhấp chọn ô giải đáp án 30 câu phía dưới để coi từng lời giải LaTeX và mẹo bấm máy Casio tương ứng!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Block 3: Metrics percentage bars -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-205 shadow-sm flex flex-col justify-between gap-4">
+                  <div>
+                    <p class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-3 text-center lg:text-left">
+                      BÁO CÁO NĂNG LỰC THEO TỪNG PHẦN
+                    </p>
+                    <div class="flex flex-col gap-3.5">
+                      ${sectionsReportHTML}
+                    </div>
+                  </div>
+
+                  <div class="text-slate-405 text-[10px] italic leading-tight text-center">
+                    Hệ thống tự động lưu giữ lịch sử. Nhấp Bắt đầu lại (Góc phải trên) để hoàn thiện số điểm 10.0!
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- DETAILED LaTeX METHODOLOGY PORTLET ACCORDIONS -->
+              <div class="bg-white p-6 rounded-2xl border border-slate-205 shadow-sm mt-2">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5 mb-5">
+                  <div>
+                    <h2 class="font-extrabold text-xl text-slate-900 tracking-tight flex items-center gap-2">
+                      <i data-lucide="file-text" class="text-rose-500 w-5 h-5"></i>
+                      XEM GIẢI CHI TIẾT & ĐÁP ÁN 30 CÂU
+                    </h2>
+                    <p class="text-xs text-slate-500">
+                      Bảng đối chiếu câu trả lời bên dưới. Nhấp vào từng câu để hiển thị đầy đủ phương pháp luận và mẹo bấm máy Casio tự học.
+                    </p>
+                  </div>
+                  
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <div class="flex items-center gap-1.5 text-xs text-slate-500">
+                      <span class="w-3.5 h-3.5 rounded bg-emerald-500/10 border border-emerald-400/20 text-emerald-500 text-center text-[10px] leading-tight font-bold font-mono">✓</span> Đúng
+                      <span class="w-3.5 h-3.5 rounded bg-rose-500/10 border border-rose-400/20 text-rose-505 text-center text-[10px] leading-tight font-bold font-mono">✗</span> Sai
+                      <span class="w-3.5 h-3.5 rounded bg-slate-200 border border-slate-300 text-center text-[10px] leading-tight font-bold font-mono">?</span> Bỏ trống
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                  ${solutionsAccordionListHTML}
+                </div>
+              </div>
+
+            </div>
+          `;
+        }
+
+        // Always recall lucide to hook up graphic tags
+        lucide.createIcons();
+      }
+
+      function goToFirstOfSection(secId) {
+        const matching = QUESTIONS.find(q => q.sectionId === secId);
+        if (matching) {
+          selectQuestion(matching.id);
+        }
+      }
+
+      function navigatePrevious() {
+        if (currentId > 1) {
+          selectQuestion(currentId - 1);
+        }
+      }
+
+      function navigateNext() {
+        if (currentId < 30) {
+          selectQuestion(currentId + 1);
+        }
+      }
+
+      function toggleHelpModal(state) {
+        showHelpModal = state;
+        const modal = document.getElementById('help-modal');
+        if (modal) {
+          if (showHelpModal) {
+            modal.classList.remove('hidden');
+          } else {
+            modal.classList.add('hidden');
+          }
+        }
+      }
+
+      // ---- FLOAT COMPONENT: CALC WIDGET CONTROLLER ----
+      let casioExpression = '';
+      let casioEvalString = '';
+      let casioResult = '';
+      let casioLastAns = '0';
+      let casioIsRadian = true;
+      let casioIsShift = false;
+
+      function toggleCalculator() {
+        showCalculator = !showCalculator;
+        const cWidget = document.getElementById('casio-widget');
+        const cBtn = document.getElementById('toggle-calc-btn');
+        if (cWidget && cBtn) {
+          if (showCalculator) {
+            cWidget.classList.remove('hidden');
+            cBtn.className = "flex items-center justify-center p-3 rounded-full shadow-lg border cursor-pointer bg-rose-500 text-white border-rose-450";
+          } else {
+            cWidget.classList.add('hidden');
+            cBtn.className = "flex items-center justify-center p-3 rounded-full shadow-lg border cursor-pointer bg-slate-900 text-rose-400 border-slate-700 hover:text-white";
+          }
+        }
+      }
+
+      function toggleRadianMode() {
+        casioIsRadian = !casioIsRadian;
+        const rBtn = document.getElementById('radian-toggle-btn');
+        const screenRad = document.getElementById('screen-radian-indicator');
+        if (rBtn) {
+          rBtn.innerText = casioIsRadian ? 'RAD' : 'DEG';
+        }
+        if (screenRad) {
+          screenRad.innerText = casioIsRadian ? 'RAD' : 'DEG';
+        }
+      }
+
+      function calcPressShift() {
+        casioIsShift = !casioIsShift;
+        const sIndicator = document.getElementById('screen-shift-indicator');
+        const sBtn = document.getElementById('btn-shift-toggle');
+        
+        if (sBtn) {
+          if (casioIsShift) {
+            sBtn.className = "py-1.5 text-[9px] font-bold rounded font-mono bg-amber-500 text-slate-900";
+            sBtn.innerText = "SHIFT_ON";
+          } else {
+            sBtn.className = "py-1.5 text-[9px] font-bold rounded font-mono bg-slate-800 text-amber-500";
+            sBtn.innerText = "SHIFT";
+          }
+        }
+        if (sIndicator) {
+          if (casioIsShift) {
+            sIndicator.classList.remove('hidden');
+          } else {
+            sIndicator.classList.add('hidden');
+          }
+        }
+      }
+
+      function calcAppend(display, evaluation) {
+        casioExpression += display;
+        casioEvalString += evaluation;
+        updateCasioScreen();
+      }
+
+      function calcClear() {
+        casioExpression = '';
+        casioEvalString = '';
+        casioResult = '';
+        updateCasioScreen();
+      }
+
+      function calcDelete() {
+        if (casioExpression.length === 0) return;
+        casioExpression = casioExpression.slice(0, -1);
+        casioEvalString = casioEvalString.slice(0, -1);
+        updateCasioScreen();
+      }
+
+      function calcEvaluate() {
+        if (!casioEvalString) return;
+        try {
+          let compiled = casioEvalString
+            .replace(/π/g, 'Math.PI')
+            .replace(/e/g, 'Math.E')
+            .replace(/Ans/g, casioLastAns);
+
+          // Support Degree translation inside trigos if not Radian
+          if (!casioIsRadian) {
+            compiled = compiled
+              .replace(/Math\.sin\((.*?)\)/g, 'Math.sin(($1) * Math.PI / 180)')
+              .replace(/Math\.cos\((.*?)\)/g, 'Math.cos(($1) * Math.PI / 180)')
+              .replace(/Math\.tan\((.*?)\)/g, 'Math.tan(($1) * Math.PI / 180)');
+          }
+
+          const evaluatedVal = new Function(`return (${compiled})`)();
+          if (typeof evaluatedVal === 'number' && !isNaN(evaluatedVal)) {
+            const formatted = Number(evaluatedVal.toFixed(6)).toString();
+            casioResult = formatted;
+            casioLastAns = formatted;
+          } else {
+            casioResult = 'ERROR';
+          }
+        } catch (err) {
+          casioResult = 'SYNTAX ERROR';
+        }
+        updateCasioScreen();
+      }
+
+      function updateCasioScreen() {
+        const exprEl = document.getElementById('screen-expr');
+        const resEl = document.getElementById('screen-result');
+        if (exprEl) {
+          exprEl.innerText = casioExpression || '0';
+        }
+        if (resEl) {
+          resEl.innerText = casioResult ? `= ${casioResult}` : '';
+        }
+      }
+
+
+      // ---- FLOAT COMPONENT: BLACKBOARD DRAW CHASSIS ----
+      let isDrawing = false;
+      let brushColor = '#f43f5e'; // default Rose 500
+      let brushSize = 3;
+      let isEraserActive = false;
+      let canvas, ctx;
+
+      const BRUSH_COLORS_METADATA = [
+        { label: 'Rose', value: '#f43f5e' },
+        { label: 'Indigo', value: '#6366f1' },
+        { label: 'Green', value: '#10b981' },
+        { label: 'Amber', value: '#f59e0b' },
+        { label: 'White', value: '#ffffff' }
+      ];
+
+      function toggleScratchpad() {
+        showScratchpad = !showScratchpad;
+        const sWidget = document.getElementById('scratch-widget');
+        const sBtn = document.getElementById('toggle-scratch-btn');
+        if (sWidget && sBtn) {
+          if (showScratchpad) {
+            sWidget.classList.remove('hidden');
+            sBtn.className = "flex items-center justify-center p-3 rounded-full shadow-lg border cursor-pointer bg-indigo-600 text-white border-indigo-400";
+            
+            // Adjust canvas resolution dynamically on display open
+            setTimeout(() => {
+              adjustScratchCanvasResolution();
+            }, 50);
+          } else {
+            sWidget.classList.add('hidden');
+            sBtn.className = "flex items-center justify-center p-3 rounded-full shadow-lg border cursor-pointer bg-slate-900 text-indigo-400 border-slate-700 hover:text-white";
+          }
+        }
+      }
+
+      function initScratchpadColors() {
+        const listEl = document.getElementById('brush-colors-list');
+        if (!listEl) return;
+        
+        let colorsHTML = '';
+        BRUSH_COLORS_METADATA.forEach(c => {
+          colorsHTML += `
+            <button
+              onclick="selectBrushColor('${c.value}')"
+              style="background-color: ${c.value}"
+              id="scratch-color-${c.value.replace('#', '')}"
+              class="w-5 h-5 rounded-full border-2 border-transparent transition-all hover:scale-105"
+              title="${c.label}"
+            ></button>
+          `;
+        });
+        listEl.innerHTML = colorsHTML;
+        selectBrushColor('#f43f5e'); // Default trigger
+      }
+
+      function selectBrushColor(hexVal) {
+        brushColor = hexVal;
+        isEraserActive = false;
+
+        // Visual borders selection reset
+        BRUSH_COLORS_METADATA.forEach(c => {
+          const btn = document.getElementById(`scratch-color-${c.value.replace('#', '')}`);
+          if (btn) {
+            if (c.value === hexVal) {
+              btn.className = "w-5 h-5 rounded-full border-2 border-white scale-110 shadow-md shadow-white/10";
+            } else {
+              btn.className = "w-5 h-5 rounded-full border-2 border-transparent hover:scale-105";
+            }
+          }
+        });
+
+        const eraserBtn = document.getElementById('scratch-eraser-btn');
+        if (eraserBtn) {
+          eraserBtn.className = "p-1.5 rounded-md border text-xs font-semibold flex items-center gap-1 transition-colors bg-slate-800 text-slate-300 border-slate-750 hover:bg-slate-750";
+        }
+
+        setupScratchCanvasContext();
+      }
+
+      function toggleEraserMode() {
+        isEraserActive = !isEraserActive;
+        const eraserBtn = document.getElementById('scratch-eraser-btn');
+        
+        // Remove brush color selection circle border highlights
+        BRUSH_COLORS_METADATA.forEach(c => {
+          const btn = document.getElementById(`scratch-color-${c.value.replace('#', '')}`);
+          if (btn) btn.className = "w-5 h-5 rounded-full border-2 border-transparent hover:scale-105";
+        });
+
+        if (eraserBtn) {
+          if (isEraserActive) {
+            eraserBtn.className = "p-1.5 rounded-md border text-xs font-semibold flex items-center gap-1 transition-colors bg-rose-500 text-white border-rose-400";
+          } else {
+            eraserBtn.className = "p-1.5 rounded-md border text-xs font-semibold flex items-center gap-1 transition-colors bg-slate-800 text-slate-300 border-slate-750 hover:bg-slate-755";
+            selectBrushColor(brushColor); // restore
+          }
+        }
+        setupScratchCanvasContext();
+      }
+
+      function changeBrushSize(val) {
+        brushSize = parseInt(val);
+        const label = document.getElementById('brush-size-label');
+        if (label) {
+          label.innerText = `Cỡ nét: ${brushSize}px`;
+        }
+        setupScratchCanvasContext();
+      }
+
+      function initScratchpadCanvas() {
+        canvas = document.getElementById('scratch-canvas');
+        if (!canvas) return;
+        ctx = canvas.getContext('2d');
+
+        // Mouse Triggers
+        canvas.addEventListener('mousedown', startDrawingScratch);
+        canvas.addEventListener('mousemove', drawScratch);
+        canvas.addEventListener('mouseup', stopDrawingScratch);
+        canvas.addEventListener('mouseleave', stopDrawingScratch);
+
+        // Touch triggers
+        canvas.addEventListener('touchstart', startDrawingScratch, { passive: false });
+        canvas.addEventListener('touchmove', drawScratch, { passive: false });
+        canvas.addEventListener('touchend', stopDrawingScratch);
+      }
+
+      function adjustScratchCanvasResolution() {
+        if (!canvas || !ctx) return;
+        const rect = canvas.getBoundingClientRect();
+        
+        // High density rendering representation
+        canvas.width = rect.width * 2;
+        canvas.height = rect.height * 2;
+        ctx.scale(2, 2);
+
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        // Fill canvas with Blackboard deep background color Slate 800
+        clearScratchCanvas();
+      }
+
+      function setupScratchCanvasContext() {
+        if (!ctx) return;
+        ctx.strokeStyle = isEraserActive ? '#1e293b' : brushColor;
+        ctx.lineWidth = isEraserActive ? brushSize * 4 : brushSize;
+      }
+
+      function startDrawingScratch(e) {
+        if (!ctx || !canvas) return;
+        setupScratchCanvasContext();
+
+        const rect = canvas.getBoundingClientRect();
+        let clientX, clientY;
+
+        if (e.touches && e.touches.length > 0) {
+          clientX = e.touches[0].clientX;
+          clientY = e.touches[0].clientY;
+        } else {
+          clientX = e.clientX;
+          clientY = e.clientY;
+        }
+
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        isDrawing = true;
+      }
+
+      function drawScratch(e) {
+        if (!isDrawing || !ctx || !canvas) return;
+        
+        // Prevent default scrolling on touch screen dragging
+        if (e.cancelable) e.preventDefault();
+
+        const rect = canvas.getBoundingClientRect();
+        let clientX, clientY;
+
+        if (e.touches && e.touches.length > 0) {
+          clientX = e.touches[0].clientX;
+          clientY = e.touches[0].clientY;
+        } else {
+          clientX = e.clientX;
+          clientY = e.clientY;
+        }
+
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+
+      function stopDrawingScratch() {
+        isDrawing = false;
+      }
+
+      function clearScratchCanvas() {
+        if (!ctx || !canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        ctx.fillStyle = '#1e293b'; // deep Slate 800
+        ctx.fillRect(0, 0, rect.width, rect.height);
+      }
+
+
+      // ---- HELPER: DRAG MODAL ADHESION CHASSIS ----
+      function makeElementDraggable(dragHandle, elementToDrag) {
+        if (!dragHandle || !elementToDrag) return;
+
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        dragHandle.onmousedown = dragMouseDown;
+        dragHandle.ontouchstart = dragMouseDown;
+
+        function dragMouseDown(e) {
+          e = e || window.event;
+          if (e.target.closest('button') || e.target.closest('input')) return;
+
+          if (e.type === 'touchstart') {
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+          } else {
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+          }
+
+          document.onmouseup = closeDragElement;
+          document.ontouchend = closeDragElement;
+          document.onmousemove = elementDrag;
+          document.ontouchmove = elementDrag;
+        }
+
+        function elementDrag(e) {
+          e = e || window.event;
+          let clientX, clientY;
+
+          if (e.type === 'touchmove') {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+          } else {
+            e.preventDefault();
+            clientX = e.clientX;
+            clientY = e.clientY;
+          }
+
+          pos1 = pos3 - clientX;
+          pos2 = pos4 - clientY;
+          pos3 = clientX;
+          pos4 = clientY;
+
+          const topVal = elementToDrag.offsetTop - pos2;
+          const leftVal = elementToDrag.offsetLeft - pos1;
+
+          const maxLeft = window.innerWidth - elementToDrag.offsetWidth;
+          const maxTop = window.innerHeight - elementToDrag.offsetHeight;
+
+          elementToDrag.style.top = Math.max(0, Math.min(topVal, maxTop)) + "px";
+          elementToDrag.style.left = Math.max(0, Math.min(leftVal, maxLeft)) + "px";
+          elementToDrag.style.position = 'fixed';
+          elementToDrag.style.bottom = 'auto';
+          elementToDrag.style.right = 'auto';
+        }
+
+        function closeDragElement() {
+          document.onmouseup = null;
+          document.ontouchend = null;
+          document.onmousemove = null;
+          document.ontouchmove = null;
+        }
+      }
+    </script>
+  </body>
+</html>

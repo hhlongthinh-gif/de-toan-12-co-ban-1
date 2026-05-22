@@ -1,0 +1,6 @@
+{
+  "name": "Đề Kiểm Tra Toán Tổng Hợp",
+  "description": "Ứng dụng làm bài tập trắc nghiệm Toán online 30 câu với các phần Thống kê, Tích phân, Hình học Oxyz và Cấp số cộng/nhân, hỗ trợ máy tính Casio ảo, nháp và giải chi tiết.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
